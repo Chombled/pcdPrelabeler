@@ -1,9 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from pypcd4 import PointCloud
+from sklearn.cluster import DBSCAN
 
 POINTCLOUD_PATH = "/Users/emil/Documents/HSE_VSV/Project_Axle-Detection/Pointclouds/lidar_point_cloud_3/transit_20250922-100144_c500_id10561.pcd"
-MIN_CLEARENCE = 0.05
+MIN_CLEARENCE = 0.1
+DBSCAN_EPSILON = 0.5
+DBSCAN_MIN_SAMPLES = 2
 
 
 def read_pointcloud(path=POINTCLOUD_PATH):
@@ -30,13 +33,21 @@ def get_lower_wheel_points(pointcloud_array):
     lower_bounds = get_lower_bounds(pointcloud_array)
     global_min_z = lower_bounds[:, 1].min()
     wheel_mask = lower_bounds[:, 1] <= (global_min_z + MIN_CLEARENCE)
-    return lower_bounds[wheel_mask]
+    lower_wheel_points = lower_bounds[wheel_mask]
+    return lower_wheel_points
+
+
+def get_point_cluster(lower_wheel_points):
+    dbscan = DBSCAN(eps=DBSCAN_EPSILON, min_samples=DBSCAN_MIN_SAMPLES)
+    clusters = dbscan.fit_predict(lower_wheel_points)
+    return clusters
 
 
 if __name__ == "__main__":
     pointcloud_array = read_pointcloud()
     lower_bounds = get_lower_bounds(pointcloud_array)
     lower_wheel_points = get_lower_wheel_points(pointcloud_array)
+    clusters = get_point_cluster(lower_wheel_points)
 
     plt.style.use("dark_background")
     fig, ax = plt.subplots()
@@ -46,7 +57,7 @@ if __name__ == "__main__":
         pointcloud_array[:, 1],
         pointcloud_array[:, 2],
         c=pointcloud_array[:, 0],
-        cmap="plasma",
+        cmap="winter",
         edgecolor="k",
         s=15,
         alpha=0.3,
@@ -63,7 +74,8 @@ if __name__ == "__main__":
         lower_wheel_points[:, 0],
         lower_wheel_points[:, 1],
         marker="X",
-        c="red",
+        c=clusters,
+        cmap="autumn",
         label="Wheel points",
         zorder=10,
     )  # plot for the detected wheel points
