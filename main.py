@@ -4,9 +4,9 @@ from pypcd4 import PointCloud
 from sklearn.cluster import DBSCAN
 
 POINTCLOUD_PATH = "/Users/emil/Documents/HSE_VSV/Project_Axle-Detection/Pointclouds/lidar_point_cloud_3/transit_20250922-100144_c500_id10561.pcd"
-MIN_CLEARENCE = 0.1
-DBSCAN_EPSILON = 0.5
-DBSCAN_MIN_SAMPLES = 2
+MIN_CLEARENCE = 0.06 # 11.5 cm by "law" but mudflaps exist :(
+DBSCAN_EPSILON = 0.15 # scanlines are about 12 cm apart
+DBSCAN_MIN_SAMPLES = 2 # needs two points for a bounding box
 
 
 def read_pointcloud(path=POINTCLOUD_PATH):
@@ -35,7 +35,6 @@ def get_lower_wheel_points(pointcloud_array):
     wheel_mask = lower_bounds[:, 1] <= (global_min_z + MIN_CLEARENCE)
     lower_wheel_points = lower_bounds[wheel_mask]
     return lower_wheel_points
-
 
 def get_point_cluster(lower_wheel_points):
     dbscan = DBSCAN(eps=DBSCAN_EPSILON, min_samples=DBSCAN_MIN_SAMPLES)
