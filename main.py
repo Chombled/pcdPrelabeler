@@ -10,7 +10,6 @@ if __name__ == "__main__":
     lower_wheel_points = detection.utils.get_lowest_points(pointcloud_array)
     labels = detection.utils.get_dbscan_clusters(lower_wheel_points)
     boxes = detection.points.get_bounding_boxes(lower_wheel_points, labels)
-    print(boxes)
 
     plt.style.use("dark_background")
     fig, ax = plt.subplots()
@@ -42,11 +41,11 @@ if __name__ == "__main__":
         label="Wheel points",
         zorder=10,
     )  # plot for the detected wheel points (with cluster colouring)
-    for lbl, ((anchor_x, anchor_y), edge_length) in boxes.items():
+    for lbl, ((anchor_x, anchor_y), width, height) in boxes.items():
         rect = mpatches.Rectangle(
             (anchor_x, anchor_y),
-            width=edge_length,
-            height=edge_length,
+            width=width,
+            height=height,
             fill=False,
             zorder=15,
         )

@@ -19,6 +19,8 @@ def get_bounding_boxes(points, labels):
 
         anchor = (min_x, max_y)
         edge_length = max_x - min_x
-        boxes[label] = (anchor, edge_length)
+        width = edge_length
+        height = edge_length
+        boxes[label] = (anchor, width, height)
 
     return boxes
