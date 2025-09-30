@@ -1,39 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import DBSCAN
 import matplotlib.patches as mpatches
 import helpers
-
-MIN_CLEARENCE = 0.06  # 11.5 cm by "law" but mudflaps exist :(
-DBSCAN_EPSILON = 0.15  # scanlines are about 12 cm apart
-DBSCAN_MIN_SAMPLES = 2  # needs two points for a bounding box
-
-def get_lower_bounds(pointcloud_array):
-    vehicle_mask = pointcloud_array[:, 2] > 0
-    vehicle_pointcloud = pointcloud_array[vehicle_mask]
-    y_steps = np.unique(vehicle_pointcloud[:, 1])
-    min_z = np.empty_like(y_steps, dtype=float)
-
-    for i, y in enumerate(y_steps):
-        step_mask = vehicle_pointcloud[:, 1] == y
-        min_z[i] = vehicle_pointcloud[step_mask, 2].min()
-
-    lower_bounds = np.column_stack((y_steps, min_z))
-    return lower_bounds
-
-
-def get_lower_wheel_points(pointcloud_array):
-    lower_bounds = get_lower_bounds(pointcloud_array)
-    global_min_z = lower_bounds[:, 1].min()
-    wheel_mask = lower_bounds[:, 1] <= (global_min_z + MIN_CLEARENCE)
-    lower_wheel_points = lower_bounds[wheel_mask]
-    return lower_wheel_points
-
-
-def get_point_cluster(lower_wheel_points):
-    dbscan = DBSCAN(eps=DBSCAN_EPSILON, min_samples=DBSCAN_MIN_SAMPLES)
-    labels = dbscan.fit_predict(lower_wheel_points)
-    return labels
+import detection
 
 
 def get_bounding_boxes(points, labels):
@@ -55,9 +24,9 @@ def get_bounding_boxes(points, labels):
 
 if __name__ == "__main__":
     pointcloud_array = helpers.utils.read_pointcloud()
-    lower_bounds = get_lower_bounds(pointcloud_array)
-    lower_wheel_points = get_lower_wheel_points(pointcloud_array)
-    labels = get_point_cluster(lower_wheel_points)
+    lower_bounds = detection.utils.get_lower_bounds(pointcloud_array)
+    lower_wheel_points = detection.utils.get_lowest_points(pointcloud_array)
+    labels = detection.utils.get_dbscan_clusters(lower_wheel_points)
     boxes = get_bounding_boxes(lower_wheel_points, labels)
     print(boxes)
 
