@@ -1,25 +1,7 @@
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import helpers
 import detection
-
-
-def get_bounding_boxes(points, labels):
-    unique_labels = np.unique(labels)
-    clusters = [points[labels == l] for l in unique_labels]
-
-    boxes = {}
-    for label, cluster in zip(unique_labels, clusters):
-        max_y = cluster[:, 1].max()
-        min_x = cluster[:, 0].min()
-        max_x = cluster[:, 0].max()
-
-        anchor = (min_x, max_y)
-        edge_length = max_x - min_x
-        boxes[label] = (anchor, edge_length)
-
-    return boxes
 
 
 if __name__ == "__main__":
@@ -27,7 +9,7 @@ if __name__ == "__main__":
     lower_bounds = detection.utils.get_lower_bounds(pointcloud_array)
     lower_wheel_points = detection.utils.get_lowest_points(pointcloud_array)
     labels = detection.utils.get_dbscan_clusters(lower_wheel_points)
-    boxes = get_bounding_boxes(lower_wheel_points, labels)
+    boxes = detection.points.get_bounding_boxes(lower_wheel_points, labels)
     print(boxes)
 
     plt.style.use("dark_background")
