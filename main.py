@@ -1,20 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from pypcd4 import PointCloud
 from sklearn.cluster import DBSCAN
 import matplotlib.patches as mpatches
+import helpers
 
-POINTCLOUD_PATH = "/Users/emil/Documents/HSE_VSV/Project_Axle-Detection/Pointclouds/lidar_point_cloud_3/transit_20250922-100144_c500_id10561.pcd"
 MIN_CLEARENCE = 0.06  # 11.5 cm by "law" but mudflaps exist :(
 DBSCAN_EPSILON = 0.15  # scanlines are about 12 cm apart
 DBSCAN_MIN_SAMPLES = 2  # needs two points for a bounding box
-
-
-def read_pointcloud(path=POINTCLOUD_PATH):
-    pc = PointCloud.from_path(POINTCLOUD_PATH)
-    pointcloud_array = pc.numpy(("x", "y", "z"))
-    return pointcloud_array
-
 
 def get_lower_bounds(pointcloud_array):
     vehicle_mask = pointcloud_array[:, 2] > 0
@@ -62,7 +54,7 @@ def get_bounding_boxes(points, labels):
 
 
 if __name__ == "__main__":
-    pointcloud_array = read_pointcloud()
+    pointcloud_array = helpers.utils.read_pointcloud()
     lower_bounds = get_lower_bounds(pointcloud_array)
     lower_wheel_points = get_lower_wheel_points(pointcloud_array)
     labels = get_point_cluster(lower_wheel_points)
