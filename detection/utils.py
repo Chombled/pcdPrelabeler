@@ -23,8 +23,7 @@ def get_lower_bounds(pointcloud_array):
     return lower_bounds
 
 
-def get_lowest_points(pointcloud_array):
-    lower_bounds = get_lower_bounds(pointcloud_array)
+def get_lowest_points(lower_bounds):
     global_min_z = lower_bounds[:, 1].min()
     wheel_mask = lower_bounds[:, 1] <= (global_min_z + MIN_CLEARANCE)
     lower_wheel_points = lower_bounds[wheel_mask]

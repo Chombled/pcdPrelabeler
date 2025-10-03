@@ -7,9 +7,9 @@ import detection
 if __name__ == "__main__":
     pointcloud_array = helpers.utils.read_pointcloud()
     lower_bounds = detection.utils.get_lower_bounds(pointcloud_array)
-    lower_wheel_points = detection.utils.get_lowest_points(pointcloud_array)
+    lower_wheel_points = detection.utils.get_lowest_points(lower_bounds)
     labels = detection.utils.get_dbscan_clusters(lower_wheel_points)
-    boxes = detection.points.get_bounding_boxes(lower_wheel_points, labels)
+    boxes = detection.dips.get_bounding_boxes(pointcloud_array)
 
     plt.style.use("dark_background")
     fig, ax = plt.subplots()
