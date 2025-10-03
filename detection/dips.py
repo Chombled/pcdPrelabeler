@@ -159,7 +159,7 @@ def get_bounding_boxes(pointcloud_array):
 
         anchor = (min_x, min_y)
         width = max_x - min_x
-        height = ((left_y + right_y) / 2) * 2
+        height = left_y + right_y
         boxes[label] = (anchor, width, height)
 
     return boxes
