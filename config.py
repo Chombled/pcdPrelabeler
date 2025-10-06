@@ -3,7 +3,7 @@ Global variables and defaults
 """
 
 # helper util defaults
-POINTCLOUD_PATH = "/Users/emil/Documents/HSE_VSV/Project_Axle-Detection/Pointclouds/lidar_point_cloud_3/transit_20250922-100144_c500_id10561.pcd"
+POINTCLOUD_PATH = "/Users/emil/Documents/HSE_VSV/Project_Axle-Detection/Pointclouds/lidar_point_cloud_3"
 
 # detection util defaults
 MIN_CLEARANCE = 0.06  # maximum distance up from the lowest point to still be added to the lowest points
