@@ -132,17 +132,19 @@ def get_bounding_boxes(pointcloud_array):
     lower_bounds = utils.get_lower_bounds(pointcloud_array)
 
     spline = _get_spline(lower_bounds)
-    interpolation_x = _get_interpolation_x(lower_bounds)
-    interpolated_lower_bounds = np.column_stack(
-        (interpolation_x, spline(interpolation_x))
-    )
 
-    lowest_points = utils.get_lowest_points(interpolated_lower_bounds)
+    lowest_points = utils.get_lowest_points(lower_bounds)
     labels = utils.get_dbscan_clusters(lowest_points)
     unique_labels = np.unique(labels)
-    clusters = [lowest_points[labels == label] for label in unique_labels]
-
+    clusters = [
+        lowest_points[labels == label]
+        for label in unique_labels
+        if label != -1  # noise
+    ]
     expanded_clusters = _expand_clusters_with_threshold(clusters, spline)
+
+    '''debug'''
+    print(labels)
 
     boxes = {}
     for label, cluster in zip(unique_labels, expanded_clusters):
