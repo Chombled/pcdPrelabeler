@@ -8,9 +8,8 @@ from sklearn.cluster import DBSCAN
 
 
 def get_lower_bounds(pointcloud_array):
-    vehicle_mask = (
-        pointcloud_array[:, 2] > 0
-    )  # used since the pointcloud ships with bounding box drawn on floor
+    center_x = (pointcloud_array[:, 0].min() + pointcloud_array[:, 0].max()) / 2
+    vehicle_mask = (pointcloud_array[:, 2] > 0) & (pointcloud_array[:, 0] > center_x)
     vehicle_pointcloud = pointcloud_array[vehicle_mask]
     y_steps = np.unique(vehicle_pointcloud[:, 1])
     min_z = np.empty_like(y_steps, dtype=float)

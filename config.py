@@ -8,7 +8,7 @@ POINTCLOUD_PATH = "/Users/emil/Documents/HSE_VSV/Project_Axle-Detection/Pointclo
 # detection util defaults
 MIN_CLEARANCE = 0.06  # maximum distance up from the lowest point to still be added to the lowest points
 DBSCAN_EPSILON = 0.20  # should be >= distance between scan lines
-DBSCAN_MIN_SAMPLES = 2  # should be >= 2 so the bbox isn't dimensionless
+DBSCAN_MIN_SAMPLES = 3  # should be >= 2 so the bbox isn't dimensionless
 
 # dips defaults
 INTERPOLATION_RESOLUTION = 0.01
