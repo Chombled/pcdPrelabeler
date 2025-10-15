@@ -143,7 +143,7 @@ def get_bounding_boxes(pointcloud_array):
     ]
     expanded_clusters = _expand_clusters_with_threshold(clusters, spline)
 
-    '''debug'''
+    """debug"""
     print(labels)
 
     boxes = {}

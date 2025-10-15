@@ -89,7 +89,7 @@ def interactive_plot(filepaths):
             plt.close(fig)
 
     fig.canvas.mpl_connect("key_press_event", _on_key)
-    
+
     _plot_current()
     plt.show()
 
@@ -97,6 +97,7 @@ def interactive_plot(filepaths):
 def main():
     paths = collect_filepaths(POINTCLOUD_PATH)
     interactive_plot(paths)
+
 
 if __name__ == "__main__":
     main()
