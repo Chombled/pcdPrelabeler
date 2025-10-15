@@ -38,9 +38,9 @@ def interactive_plot(filepaths):
         boxes = detection.dips.get_bounding_boxes(pointcloud_array)
 
         ax.scatter(
+            pointcloud_array[:, 0],
             pointcloud_array[:, 1],
-            pointcloud_array[:, 2],
-            c=pointcloud_array[:, 0],
+            c=pointcloud_array[:, 2],
             cmap="winter",
             edgecolor="k",
             s=15,

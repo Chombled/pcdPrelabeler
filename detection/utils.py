@@ -8,23 +8,23 @@ from sklearn.cluster import DBSCAN
 
 
 def get_lower_bounds(pointcloud_array):
-    center_x = (pointcloud_array[:, 0].min() + pointcloud_array[:, 0].max()) / 2
-    vehicle_mask = (pointcloud_array[:, 2] > 0) & (pointcloud_array[:, 0] > center_x)
+    center_z = (pointcloud_array[:, 2].min() + pointcloud_array[:, 2].max()) / 2
+    vehicle_mask = (pointcloud_array[:, 1] > 0) & (pointcloud_array[:, 2] > center_z)
     vehicle_pointcloud = pointcloud_array[vehicle_mask]
-    y_steps = np.unique(vehicle_pointcloud[:, 1])
-    min_z = np.empty_like(y_steps, dtype=float)
+    x_steps = np.unique(vehicle_pointcloud[:, 0])
+    min_y = np.empty_like(x_steps, dtype=float)
 
-    for i, y in enumerate(y_steps):
-        step_mask = vehicle_pointcloud[:, 1] == y
-        min_z[i] = vehicle_pointcloud[step_mask, 2].min()
+    for i, x in enumerate(x_steps):
+        step_mask = vehicle_pointcloud[:, 0] == x
+        min_y[i] = vehicle_pointcloud[step_mask, 1].min()
 
-    lower_bounds = np.column_stack((y_steps, min_z))
+    lower_bounds = np.column_stack((x_steps, min_y))
     return lower_bounds
 
 
 def get_lowest_points(lower_bounds):
-    global_min_z = lower_bounds[:, 1].min()
-    wheel_mask = lower_bounds[:, 1] <= (global_min_z + MIN_CLEARANCE)
+    global_min_y = lower_bounds[:, 1].min()
+    wheel_mask = lower_bounds[:, 1] <= (global_min_y + MIN_CLEARANCE)
     lower_wheel_points = lower_bounds[wheel_mask]
     return lower_wheel_points
 
