@@ -7,6 +7,11 @@ import detection
 from config import POINTCLOUD_PATH
 
 
+"""
+Gets all pcds from a dir (no single files supported at this time)
+"""
+
+
 def collect_filepaths(folder: str, pattern: str = "*.pcd"):
     folder_path = pathlib.Path(folder).resolve()
 
@@ -14,6 +19,13 @@ def collect_filepaths(folder: str, pattern: str = "*.pcd"):
         raise ValueError(f"Not a directory: {folder_path}")
 
     return [str(file_path) for file_path in sorted(folder_path.rglob(pattern))]
+
+
+""" 
+Plots each pcd from its side as a scatter plot with depth colouring, 
+overlays the lower bounds and points found and then draws the bounding boxes from the interpolated dips.
+Usage: n = next pcd, p = previous pcd, q = quit
+"""
 
 
 def interactive_plot(filepaths):
