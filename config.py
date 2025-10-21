@@ -15,3 +15,4 @@ INTERPOLATION_RESOLUTION = 0.01
 STEP_SIZE = 0.05  # step size for the slope check
 SLOPE_THRESHOLD = 0.5  # minimum slope before slope-change trigger is armed
 MAX_STEPS = 5000  # safeguard against runaways
+STANDARD_DEPTH = -0.4 # depth of the wheel-bboxes (anchor is on the max z so the bbox needs to extend inwards => negative standard depth)

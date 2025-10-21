@@ -9,7 +9,13 @@ The bounding boxes are anchored by the lowest point of the expanded clusters in 
 import numpy as np
 from . import utils
 from scipy.interpolate import CubicSpline
-from config import INTERPOLATION_RESOLUTION, STEP_SIZE, SLOPE_THRESHOLD, MAX_STEPS
+from config import (
+    INTERPOLATION_RESOLUTION,
+    STEP_SIZE,
+    SLOPE_THRESHOLD,
+    MAX_STEPS,
+    STANDARD_DEPTH,
+)
 
 
 def _get_spline(lower_bounds):
@@ -128,7 +134,7 @@ def _expand_clusters_with_threshold(
     return expanded_clusters
 
 
-def get_bounding_boxes(pointcloud_array):
+def get_bounding_boxes(pointcloud_array, is_3d=False):
     lower_bounds = utils.get_lower_bounds(pointcloud_array)
 
     spline = _get_spline(lower_bounds)
@@ -143,9 +149,6 @@ def get_bounding_boxes(pointcloud_array):
     ]
     expanded_clusters = _expand_clusters_with_threshold(clusters, spline)
 
-    """debug"""
-    print(labels)
-
     boxes = {}
     for label, cluster in zip(unique_labels, expanded_clusters):
         min_x = cluster[:, 0].min()
@@ -159,9 +162,31 @@ def get_bounding_boxes(pointcloud_array):
 
         min_y = cluster[:, 1].min()
 
-        anchor = (min_x, min_y)
         width = max_x - min_x
         height = left_y + right_y
-        boxes[label] = (anchor, width, height)
+
+        if is_3d:
+            max_y = cluster[:, 1].max()
+
+            cluster_mask = (
+                (pointcloud_array[:, 1] > 0)
+                & (pointcloud_array[:, 0] >= min_x)
+                & (pointcloud_array[:, 0] <= max_x)
+                & (pointcloud_array[:, 1] >= min_y)
+                & (pointcloud_array[:, 1] <= max_y)
+            )  # bottom points ignored, all other points within the 2d bbox accepted
+
+            cluster_pointcloud = pointcloud_array[cluster_mask]
+            max_z = (
+                cluster_pointcloud.max()
+            )  # closer to the left side of the vehicle = higher z
+
+            anchor = (min_x, min_y, max_z)
+            depth = STANDARD_DEPTH
+            boxes[label] = (anchor, width, height, depth) # 3d anchor with 3 extents
+
+        else:
+            anchor = (min_x, min_y)
+            boxes[label] = (anchor, width, height) # 2d anchor with 2 extents
 
     return boxes
