@@ -12,6 +12,7 @@ import detection
 EXPORT_DIR = pathlib.Path("exports").resolve()
 EXPORT_DIR.mkdir(exist_ok=True)
 
+
 # since the JSON can't parse numpy Dtypes :(
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -26,7 +27,7 @@ class NumpyEncoder(json.JSONEncoder):
 
 def export_all_bounding_boxes(pcd_dir: str):
     folder_path = pathlib.Path(pcd_dir).resolve()
-    pcd_files = sorted(folder_path.rglob("*.pcd")) # all .pcd files in the folder
+    pcd_files = sorted(folder_path.rglob("*.pcd"))  # all .pcd files in the folder
     if not pcd_files:
         raise ValueError(f"No .pcd files found in {folder_path}")
 
