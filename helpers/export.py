@@ -8,8 +8,9 @@ import pathlib
 import numpy as np
 import helpers
 import detection
+from config import EXPORT_DIR_NAME
 
-EXPORT_DIR = pathlib.Path("exports").resolve()
+EXPORT_DIR = pathlib.Path(EXPORT_DIR_NAME).resolve()
 EXPORT_DIR.mkdir(exist_ok=True)
 
 

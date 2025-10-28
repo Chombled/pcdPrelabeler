@@ -183,10 +183,10 @@ def get_bounding_boxes(pointcloud_array, is_3d=False):
 
             anchor = (min_x, min_y, max_z)
             depth = STANDARD_DEPTH
-            boxes[label] = (anchor, width, height, depth) # 3d anchor with 3 extents
+            boxes[label] = (anchor, width, height, depth)  # 3d anchor with 3 extents
 
         else:
             anchor = (min_x, min_y)
-            boxes[label] = (anchor, width, height) # 2d anchor with 2 extents
+            boxes[label] = (anchor, width, height)  # 2d anchor with 2 extents
 
     return boxes
