@@ -17,10 +17,11 @@ def main():
         description="vehicle pointcloud prelabeler with previewer"
     )
     parser.add_argument(
+        "-m",
         "--mode",
         choices=["view", "export"],
         default="view",
-        help="Usage: python3 main.py --mode [OPTION] ; Options: view, export, help",
+        help="view or export the pointclouds from a folder",
     )
     args = parser.parse_args()
 
