@@ -177,11 +177,11 @@ def get_bounding_boxes(pointcloud_array, is_3d=False):
             )  # bottom points ignored, all other points within the 2d bbox accepted
 
             cluster_pointcloud = pointcloud_array[cluster_mask]
-            max_z = (
-                cluster_pointcloud.max()
+            min_z = (
+                cluster_pointcloud.max() - STANDARD_DEPTH
             )  # closer to the left side of the vehicle = higher z
 
-            anchor = (min_x, min_y, max_z)
+            anchor = (min_x, min_y, min_z)
             depth = STANDARD_DEPTH
             boxes[label] = (anchor, width, height, depth)  # 3d anchor with 3 extents
 
