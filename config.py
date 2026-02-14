@@ -3,7 +3,7 @@ Global variables and defaults
 """
 
 # helper util defaults
-POINTCLOUD_PATH = "/Users/emil/Documents/HSE_VSV/Project_Axle-Detection/Pointclouds/lidar_point_cloud_4"
+POINTCLOUD_PATH = "/Users/emil/Documents/HSE_VSV/Project_Axle-Detection/Pointclouds/1000_enumerated_pointclouds_0"
 
 # detection util defaults
 MIN_CLEARANCE = 0.06  # maximum distance up from the lowest point to still be added to the lowest points
@@ -20,4 +20,5 @@ STANDARD_DEPTH = (
 )  # depth of the wheel-bboxes
 
 # exports defaults
-EXPORT_DIR_NAME = "exports"
+JSON_EXPORT_DIR_NAME = "exports/json"
+PCD_EXPORT_DIR_NAME = "exports/pcd"
