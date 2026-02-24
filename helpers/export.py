@@ -26,9 +26,8 @@ class NumpyEncoder(json.JSONEncoder):
 def process_pointcloud(path: str):
 
     pointcloud_array = helpers.utils.read_pointcloud(path)
-
-    # vehicle_mask = pointcloud_array[:, 1] != 0 // might be broken as of now. Will be fixed in non-prototype build (current export comes with ground box)
-    vehicle_pointcloud = pointcloud_array # [vehicle_mask]
+    vehicle_mask = pointcloud_array[:, 1] != 0
+    vehicle_pointcloud = pointcloud_array[vehicle_mask]
 
     return vehicle_pointcloud
 
